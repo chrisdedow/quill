@@ -1,3 +1,6 @@
+// helpful across the application to access the database
+// it is a singleton pattern to avoid creating multiple connections to the database
+// it is also helpful to avoid creating multiple instances of the PrismaClient
 import { PrismaClient } from '@prisma/client'
 
 declare global {

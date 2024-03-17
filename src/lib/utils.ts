@@ -49,7 +49,7 @@ export function constructMetadata({
     },
     icons,
     metadataBase: new URL('https://quill-jet.vercel.app'),
-    themeColor: '#FFF',
+    // themeColor: '#FFF', -- chris commented this out
     ...(noIndex && {
       robots: {
         index: false,

@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar'
 import Providers from '@/components/Providers'
 import { cn, constructMetadata } from '@/lib/utils'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import '@/app/globals.css'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import 'simplebar-react/dist/simplebar.min.css'

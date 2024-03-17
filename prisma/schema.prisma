@@ -1,16 +1,22 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Prisma schema files are written in Prisma Schema Language (PSL)
+// Prisma Client is used to access the database in your application code
 generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
+// need to look into pooling with Prisma if needed.
+// datasource db does not have pooling enabled by default
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL_UNPOOLED")
 }
 
+// model is a keyword to define a new model
 model User {
   id    String @id @unique //matches kinde user id
   email String @unique
@@ -24,6 +30,7 @@ model User {
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 }
 
+// enum is a keyword to define a new enum
 enum UploadStatus {
   PENDING
   PROCESSING
@@ -31,6 +38,7 @@ enum UploadStatus {
   SUCCESS
 }
 
+// model file 
 model File {
   id   String @id @default(cuid())
   name String
@@ -59,4 +67,22 @@ model Message {
   userId    String?
   File      File?    @relation(fields: [fileId], references: [id])
   fileId    String?
+}
+
+model UserProgress {
+  user_progress_id           Int      @id @default(autoincrement())
+  user_id                    String
+  created_at                 DateTime @default(now())
+  updated_at                 DateTime @default(now())
+  date                       DateTime
+  total_words_used           Int      @default(0)
+  total_unique_words_used    Int      @default(0)
+  total_words_sent        Int      @default(0)
+  total_words_received           Int      @default(0)
+  total_unique_words_sent        Int      @default(0)
+  total_unique_words_received           Int      @default(0)
+  total_words_used_all_time  Int      @default(0)
+  total_unique_words_used_all_time Int @default(0)
+
+  @@map("user_progress")
 }

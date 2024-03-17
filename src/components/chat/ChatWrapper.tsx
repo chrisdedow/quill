@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { buttonVariants } from '../ui/button'
 import { ChatContextProvider } from './ChatContext'
 import { PLANS } from '@/config/stripe'
+import { useEffect } from 'react'
 
 interface ChatWrapperProps {
   fileId: string
@@ -31,6 +32,14 @@ const ChatWrapper = ({
             : 500,
       }
     )
+  // Log the data and status every time the component renders
+  // This includes the initial render and every re-render triggered by state or prop changes
+  console.log("Rendering ChatWrapper, data:", data);
+
+  // Use useEffect to log the status when it changes
+  useEffect(() => {
+    console.log(`The status for fileId: ${fileId} is now: ${data?.status}`);
+  }, [data?.status, fileId]); // Dependency array ensures this runs on status or fileId change
 
   if (isLoading)
     return (
@@ -52,6 +61,7 @@ const ChatWrapper = ({
     )
 
   if (data?.status === 'PROCESSING')
+    // console.log('Processing PDF')
     return (
       <div className='relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2'>
         <div className='flex-1 flex justify-center items-center flex-col mb-28'>
@@ -71,6 +81,7 @@ const ChatWrapper = ({
     )
 
   if (data?.status === 'FAILED')
+    // console.error('Failed to process PDF')
     return (
       <div className='relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2'>
         <div className='flex-1 flex justify-center items-center flex-col mb-28'>
@@ -79,6 +90,7 @@ const ChatWrapper = ({
             <h3 className='font-semibold text-xl'>
               Too many pages in PDF
             </h3>
+            
             <p className='text-zinc-500 text-sm'>
               Your{' '}
               <span className='font-medium'>

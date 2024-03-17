@@ -160,6 +160,55 @@ export const appRouter = router({
         nextCursor,
       }
     }),
+    
+  // chris added getUserMessages
+  getUserMessages: privateProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+      // No fileId needed here since we're fetching based on userId
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx; // Assuming userId is available in the context
+      const { cursor } = input;
+      const limit = input.limit ?? INFINITE_QUERY_LIMIT;
+
+      // No need to check for a specific file's existence, as we're fetching user messages directly
+
+      const messages = await db.message.findMany({
+        take: limit + 1,
+        where: {
+          userId, // Use userId to fetch messages relevant to the user
+          // If you want to filter messages further (e.g., by type), add conditions here
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        select: {
+          id: true,
+          isUserMessage: true,
+          createdAt: true,
+          text: true,
+          // fileId might still be relevant to include in the selection if you want to show which file a message is related to
+          // fileId: true,
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (messages.length > limit) {
+        const nextItem = messages.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        messages,
+        nextCursor,
+      };
+    }),
+ 
 
   getFileUploadStatus: privateProcedure
     .input(z.object({ fileId: z.string() }))

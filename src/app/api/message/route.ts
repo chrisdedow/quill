@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { openai } from '@/lib/openai'
-import { getPineconeClient } from '@/lib/pinecone'
+import { pinecone } from '@/lib/pinecone'
 import { SendMessageValidator } from '@/lib/validators/SendMessageValidator'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
@@ -49,8 +49,8 @@ export const POST = async (req: NextRequest) => {
     openAIApiKey: process.env.OPENAI_API_KEY,
   })
 
-  const pinecone = await getPineconeClient()
-  const pineconeIndex = pinecone.Index('quill')
+  // const pinecone = await pinecone()
+  const pineconeIndex = pinecone.Index('language-application')
 
   const vectorStore = await PineconeStore.fromExistingIndex(
     embeddings,

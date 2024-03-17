@@ -1,12 +1,20 @@
-import { PineconeClient } from '@pinecone-database/pinecone'
+import { Pinecone } from '@pinecone-database/pinecone';
 
-export const getPineconeClient = async () => {
-  const client = new PineconeClient()
+export const pinecone = new Pinecone({
+  apiKey: process.env.PINECONE_API_KEY ?? '',
+  environment: process.env.PINECONE_ENVIRONMENT ?? '',
+  projectId: process.env.PINECONE_PROJECT_ID ?? '',
+});
 
-  await client.init({
-    apiKey: process.env.PINECONE_API_KEY!,
-    environment: 'us-east1-gcp',
-  })
+// import { PineconeClient } from '@pinecone-database/pinecone'
 
-  return client
-}
+// export const getPineconeClient = async () => {
+//   const client = new PineconeClient()
+
+//   await client.init({
+//     apiKey: process.env.PINECONE_API_KEY!,
+//     environment: 'us-east1-gcp',
+//   })
+
+//   return client
+// }

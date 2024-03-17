@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { trpc } from '../_trpc/client'
 import { Loader2 } from 'lucide-react'
 
+// this page is used for the auth callback and should not be used for anything else
 const Page = () => {
   const router = useRouter()
 
